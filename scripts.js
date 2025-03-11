@@ -1,5 +1,6 @@
 const searchinput = document.querySelector('.bar-nav');
 const currentWeatherDIV = document.querySelector('.main-details');
+const hourlyWeatherDIV = document.querySelector('.hour-list');
 
 const API_KEY = "f03ef05f8f4043fabee183757251003"
 
@@ -14,8 +15,31 @@ const weathercodes = {
     thunder_rain: [1273, 1276],
 }
 
+const displayHourlyForecast = (hourlyData) => {
+
+    const currentHour = new Date().setMinutes(0, 0, 0)
+    const next24hours = currentHour + 24 * 60 * 60 * 1000
+
+    const next24Hoursdata = hourlyData.filter(({ time}) => {
+        const forecastTime = new Date(time).getTime();
+        return forecastTime >= currentHour && forecastTime <= next24hours
+    })
+
+    hourlyWeatherDIV.innerHTML = next24Hoursdata.map(item => {
+        const temperature = Math.floor(item.temp_c)
+        const time = item.time.split(" ")[1].substring(0, 5)
+        const weatherIcon = Object.keys(weathercodes).find(icon => weathercodes[icon].includes(item.condition.code))
+
+        return `    <li class="hour-items">
+                        <p>${time}</p>
+                        <img src="weather-app-javascript-2024-08-10/icons/${weatherIcon}.svg" alt="image">
+                        <p class="graus">${temperature}</p>
+                    </li>`
+    }).join("")
+}
+
 const getWeatherDetails = async (cityname) => {
-    const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${cityname}`
+    const API_URL = `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${cityname}&days=2`
 
     try {
         const response = await fetch(API_URL)
@@ -29,7 +53,9 @@ const getWeatherDetails = async (cityname) => {
         currentWeatherDIV.querySelector(".temperatura").innerHTML = `${temperature}<span>°C</span>`
          currentWeatherDIV.querySelector(".descricao").innerText =
          description
-        
+
+         const combinedHourlyData = [...data.forecast.forecastday[0].hour, ...data.forecast.forecastday[1].hour]
+        displayHourlyForecast(combinedHourlyData)
         console.log(data)
     } catch (error) {
         console.error(error)

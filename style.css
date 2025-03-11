@@ -19,11 +19,12 @@ ul {
 
 .hour-part .hour-list {
     display: flex;
-    width: 300px;
-    gap: 40px;
+    width: 400px;
+    gap: 38px;
     overflow-x: auto;
     white-space: nowrap;
     scrollbar-width: thin;
+    padding: 20px;
 }
 
 .hour-part .hour-list .hour-items img{
@@ -115,7 +116,7 @@ ul {
 }
 
 hr {
-    width: 130%;
+    width: 135%;
     border: 1px solid rgba(46, 46, 211, 0.411);
 }
 
