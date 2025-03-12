@@ -46,6 +46,21 @@ ul {
     border-radius: 20px;
 }
 
+.no-results {
+    display: none;
+    flex-direction: column;
+    width: 250px;
+    gap: 15px;
+}
+
+.body.show-no-results .no-results{
+    display: flex;
+}
+
+body.show-no-results .main-part hr {
+    visibility: hidden;
+}
+
 
 .nav-details .search input {
     width: 340px;
